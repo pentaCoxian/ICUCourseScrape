@@ -33,7 +33,22 @@ sudo dpkg -i  google-chrome-stable_104_amd64.deb
 ```
 find matching major version chromedriver from [Here](https://chromedriver.chromium.org/downloads).
 
-activate python venv
+install python3.11 (ubuntu20.04)
+
+```
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.11 python3.11-dev python3.11-venv
+```
+
+check python and pip versions
+
+```
+python3.11 -V
+python3.11 -m pip -V
+```
+
+activate python venv.
 
 ```
 cd ./icuCourseScrape
@@ -55,3 +70,9 @@ python insert_data.py
 ```
 
 all courses should be in the courses table in mariadb.
+
+## Others
+
+- helper.pyの段階でデータは取得できていてinsert_data.pyでmariadbに入るよう調節しているだけなのでhelper.pyから直接別のドキュメントベースのDBなりに宛先変更したりしてもいいと思う。
+- Dockerは対応できるだろうけどやるのめんどくさいので気分が向くまで放置されます。プルリク歓迎。
+- 
