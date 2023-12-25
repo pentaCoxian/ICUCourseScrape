@@ -66,3 +66,69 @@ def getCourses(value = "all"):
         traceback.print_exc()
     finally:
         driver.quit()
+        
+def getSyllabus(year,regno):
+        try:
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version='104.0.5112.79').install()), options=chrome_options)
+
+            extractTag = re.compile('lbl_[^\"]+')
+            resList = []
+            for i in tqdm(range(len(regno))):
+                url = "https://campus.icu.ac.jp/public/ehandbook/PreviewSyllabus.aspx?year="+year+"&regno="+regno[i]+"&term="+regno[i][0]
+                # Open site
+                driver.get(url)
+                driver.implicitly_wait(3)
+                # Find course table (get page -> get main table -> find td with contents inside it -> )
+                form = driver.find_elements(By.TAG_NAME,"form")
+                contentTable = BeautifulSoup(form[0].get_attribute('innerHTML'),'lxml')
+                rawText = contentTable.find_all('span')
+
+                syllabusDict = {'regno':regno[i]}
+                for x in rawText:
+                    # Process Tag and content
+                    tag = extractTag.findall(str(x))
+                    tag = tag[0].replace('lbl_','')
+                    if tag == 'references':
+                        tag = 'ref'
+                    # print(tag)
+                    content = str(x).replace("<br/>",'\n')
+                    content = re.sub('<[^>]+>','',content)
+                    # Add to Dict
+                    syllabusDict.update({tag:content.strip('\n')})
+                resList.append(syllabusDict)
+
+            return resList
+        except:
+            traceback.print_exc()
+        finally:
+            driver.quit()
+            
+def getELA():
+    try: 
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version='104.0.5112.79').install()), options=chrome_options)
+
+        url = "https://course-reg.icu.ac.jp/ela/stsch/show_schedule.shtml"
+        # Open site (will be sent to SSO login)
+        driver.get(url)
+        driver.implicitly_wait(3)
+
+        # Login to ICU SSO
+        driver.find_element(By.NAME,"uname").send_keys(os.environ['ICU_ELA_ADDRESS'])
+        driver.find_element(By.NAME,"pass").send_keys(os.environ['ICU_SSO_PASSWORD'])
+        driver.find_element(By.XPATH,"/html/body/form/center/table/tbody/tr[4]/td[2]/input").click() 
+        driver.implicitly_wait(3)
+
+        table_list = []
+        # TODO
+        # update tags based on selected term
+        section_list = ["20233_FR3","20233_FR4","20233_AS3","20233_AS4","20233_RW12","20233_RW34"]
+        for section in section_list:
+            tables = driver.find_elements(By.XPATH,'//*[@id="{}"]/table'.format(section))
+            for i in tables:
+                i = i.get_attribute('outerHTML')
+                table_list.append(i)
+        return table_list
+    except:
+        traceback.print_exc()
+    finally:
+        driver.quit()
