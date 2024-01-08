@@ -34,8 +34,9 @@ def getCourseInfo():
             res = courses[i].find('span',{'id': tarID}).getText()
             #print(labels[j],": ",res)
             if labels[j] == "schedule":
-                res_strip = res.strip("<>()")
-                res_list = res_strip.split(',')
+                res_strip = res.replace('<','').replace('>','').replace('(','').replace(')','')
+                res_list = re.split('[,\s]|[\sor\s]',res_strip)
+                res_list = [i for i in res_list if i]
                 resDict["schedule_meta"] = res_list
             
             resDict[labels[j]] = res
