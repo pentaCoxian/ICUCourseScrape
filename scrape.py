@@ -11,6 +11,7 @@ import re
 import os 
 from dotenv import load_dotenv
 import time
+from tqdm import tqdm
 
 load_dotenv()
 
@@ -74,23 +75,26 @@ def getSyllabus(year,regno):
             extractTag = re.compile('lbl_[^\"]+')
             resList = []
             for i in tqdm(range(len(regno))):
-                url = "https://campus.icu.ac.jp/public/ehandbook/PreviewSyllabus.aspx?year="+year+"&regno="+regno[i]+"&term="+regno[i][0]
+                url = "https://campus.icu.ac.jp/public/ehandbook/PreviewSyllabus.aspx?year="+year+"&regno="+str(regno[i])+"&term="+str(regno[i])[0]
                 # Open site
+                # print(url)
                 driver.get(url)
-                driver.implicitly_wait(3)
+                driver.implicitly_wait(1)
                 # Find course table (get page -> get main table -> find td with contents inside it -> )
                 form = driver.find_elements(By.TAG_NAME,"form")
                 contentTable = BeautifulSoup(form[0].get_attribute('innerHTML'),'lxml')
                 rawText = contentTable.find_all('span')
-
-                syllabusDict = {'regno':regno[i]}
+                syllabusDict = {'rgno':regno[i]}
                 for x in rawText:
+
                     # Process Tag and content
                     tag = extractTag.findall(str(x))
+                    if tag == []:
+                        continue
                     tag = tag[0].replace('lbl_','')
                     if tag == 'references':
                         tag = 'ref'
-                    # print(tag)
+
                     content = str(x).replace("<br/>",'\n')
                     content = re.sub('<[^>]+>','',content)
                     # Add to Dict

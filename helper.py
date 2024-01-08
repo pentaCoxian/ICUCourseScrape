@@ -33,6 +33,11 @@ def getCourseInfo():
             # Find element
             res = courses[i].find('span',{'id': tarID}).getText()
             #print(labels[j],": ",res)
+            if labels[j] == "schedule":
+                res_strip = res.strip("<>()")
+                res_list = res_strip.split(',')
+                resDict["schedule_meta"] = res_list
+            
             resDict[labels[j]] = res
         # resDict["ids"]=int(resDict["rgno"])
         #resList.append(json.dumps(resDict,ensure_ascii=False))
