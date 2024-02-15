@@ -1,3 +1,5 @@
+> [!WARNING]
+> As of 2024/02/15, OS support has been bumped from ubuntu 20.04LTS to 22.04LTS
 
 Install mariadb using script. Follow prompts for initial setup.
 
@@ -23,15 +25,21 @@ Install mariadb connector-c. [Install CS package](https://mariadb.com/docs/conne
 > [!NOTE]
 > If the above doesn't work, try `sudo apt-get install libmariadb3 libmariadb-dev`
 
-Install google chrome. chromedriver only exists to ver 114 so lock version to that.
+> [!NOTE]
+> TODO: chrome for testing has been released. Use chrome for testing for the latest chrome releases.
 
 ```
-wget https://www.slimjet.com/chrome/download-chrome.php?file=files%2F104.0.5112.102%2Fgoogle-chrome-stable_current_amd64.deb
-# rename file
-mv download-chrome.php\?file\=files%2F104.0.5112.102%2Fgoogle-chrome-stable_current_amd64.deb google-chrome-stable_104_amd64.deb
-sudo dpkg -i  google-chrome-stable_104_amd64.deb
+sudo apt install -y npm
+sudo npm install n -g
+sudo n stable
+sudo apt purge -y npm
+sudo apt autoremove -y
 ```
-find matching major version chromedriver from [Here](https://chromedriver.chromium.org/downloads).
+
+```
+npx @puppeteer/browsers install chrome@116.0.5793.0
+npx @puppeteer/browsers install chromedriver@116.0.5793.0
+```
 
 install python3.11 (ubuntu20.04)
 
@@ -60,7 +68,7 @@ source venv/bin/activate
 install packages.
 
 ```
-pip install mariadb selenium webdriver_manager beautifulsoup4 pandas sqlalchemy lxml
+pip install mariadb selenium webdriver_manager beautifulsoup4 pandas sqlalchemy lxml tqdm
 ```
 
 Finally, run script with:

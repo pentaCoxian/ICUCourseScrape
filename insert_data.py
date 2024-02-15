@@ -111,7 +111,7 @@ if syllabus_flag == True:
         rgno_list.append(i[0])
     
 
-    syllabus_data = scrape.getSyllabus('2023',rgno_list)
+    syllabus_data = scrape.getSyllabus('2024',rgno_list)
     for f in tqdm(range(len(syllabus_data))):
         x = syllabus_data[f]
         newCourse = Syllabus(rgno=int(x['rgno']),ay=x['ay'],term=x['term'],cno=x['cno'],title_e=x['title_e'],title_j=x['title_j'],lang=x['lang'],instructor=x['instructor'],unit_e=x['unit_e'],koma_lecture_e=x['koma_lecture_e'],koma_seminar_e=x['koma_seminar_e'],koma_labo_e=x['koma_labo_e'],koma_act_e=x['koma_act_e'],koma_int_e=x['koma_int_e'],descreption=x['descreption'],descreption_j=x['descreption_j'],goals=x['goals'],goals_j=x['goals_j'],content=x['content'],content_j=x['content_j'],lang_of_inst=x['lang_of_inst'],pollicy=x['pollicy'],individual_study=x['individual_study'],ref=x['ref'],notes=x['notes'],schedule=x['schedule'],url=x['url'],course_rgno=int(x['rgno']))

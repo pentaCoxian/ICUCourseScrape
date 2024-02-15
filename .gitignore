@@ -2,3 +2,6 @@
 venv/
 __pycache__/
 mecab-ipadic-neologd/
+chrome/
+chromedriver/
+mariadb_repo_setup
